@@ -1,1 +1,1 @@
-# Hesiod-Algorithm-Repository
+# Hesiod Yield Prediction Algorithm Repository
