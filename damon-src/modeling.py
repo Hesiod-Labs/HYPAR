@@ -10,7 +10,6 @@ from sklearn.svm import LinearSVC
 from sklearn.neighbors import KNeighborsClassifier
 # package imports
 from broker import *
-from exceptions import InvalidModelError
 
 
 # Brownian motion is a simple continuous stochastic process that is widely used in physics

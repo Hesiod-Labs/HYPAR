@@ -3,48 +3,33 @@ import pandas as pd
 import matplotlib.pyplot as plt
 # package imports
 
+# method for sequence of things common within all charts ot avoid repeated code
 
-def visual_main(dataset, ):
 
-
-    dataset['Adj Close'].plot()
-    # create legend with plt.legend()
-    plt.xlabel('Time')
-    plt.ylabel('Price')
-    # plt.title('NVDA')
-    plt.show()
-
-    # rolling 20, 80
-    dataset['Rolling 50'] = dataset['Adj Close'].rolling(50).mean()
-    dataset['Rolling 200'] = dataset['Adj Close'].rolling(200).mean()
-    dataset[['Adj Close', 'Rolling 50', 'Rolling 200']].plot()
+def linear(dataset, ticker, x_label, y_label):
+    dataset.plot()
+    plt.legend()
+    plt.title(ticker)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    # plt.savefig(filepath)
     plt.show()
 
 
-    # scatter two data sets together
-    # plot and return the correlation
+def scatter(x, y, x_ticker, y_ticker):
+    # line of best fit, correlation, other analyses (removable)
     plt.scatter(x, y)
+    plt.xlabel(x_ticker)
+    plt.ylabel(y_ticker)
+    plt.legend()
+    # plt.savefig(filepath)
     plt.show()
 
 
-    # there is also np.linspace()
-    plt.hist(x, bins=100)
+def noise(dataset, ticker):
+    noisy_data = pd.DataFrame(np.random.normal(1.0, 0.03, (100, 10)))
+    projections = noisy_data.cumprod()
+    projections[ticker] = dataset
+    projections.plot()
+    # plt.savefig(filepath)
     plt.show()
-
-
-def noise():
-    returns = pd.DataFrame(np.random.normal(1.0, 0.03, (100, 10)))
-    prices = returns.cumprod()
-    prices.plot()
-    plt.show()
-
-
-def plot_percent_changes(dataset):
-    dataset['Percent Change'].plot()
-    plt.xlabel('Time')
-    plt.ylabel('Percent')
-    plt.show()
-
-
-if __name__ == '__main__':
-    visual_main()
