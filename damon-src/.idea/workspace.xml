@@ -2,24 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f62d26ac-c28a-4a0a-b711-b9508533c87e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/movingaverage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/readme.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/broker.py" beforeDir="false" afterPath="$PROJECT_DIR$/broker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/correlation.py" beforeDir="false" afterPath="$PROJECT_DIR$/correlation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/exceptions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modeling.py" beforeDir="false" afterPath="$PROJECT_DIR$/modeling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/normallity.py" beforeDir="false" afterPath="$PROJECT_DIR$/normallity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing/INTC.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing/NVDA.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing/Test Report" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing/Test Report-description" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing/Test Report.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing/Test-Spreadsheet-description.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing/Test-Spreadsheet.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing/XLNX.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing/test_paladin.py" beforeDir="false" afterPath="$PROJECT_DIR$/testing/test_paladin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/visual.py" beforeDir="false" afterPath="$PROJECT_DIR$/visual.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/testing/test_paladin.py" beforeDir="false" afterPath="$PROJECT_DIR$/testing/test_damon.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,19 +15,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/readme.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" selection-start-line="7" selection-end-line="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/broker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="25" selection-start-line="25" selection-end-line="25" />
+            <state relative-caret-position="135">
+              <caret line="9" column="38" lean-forward="true" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -93,10 +69,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/testing/test_paladin.py">
+        <entry file="file://$PROJECT_DIR$/testing/test_damon.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+            <state relative-caret-position="135">
+              <caret line="9" selection-start-line="9" selection-end-line="9" />
+              <folding>
+                <element signature="e#39#64#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -143,8 +122,9 @@
         <option value="$PROJECT_DIR$/normallity.py" />
         <option value="$PROJECT_DIR$/visual.py" />
         <option value="$PROJECT_DIR$/correlation.py" />
-        <option value="$PROJECT_DIR$/broker.py" />
         <option value="$PROJECT_DIR$/testing/test_paladin.py" />
+        <option value="$PROJECT_DIR$/broker.py" />
+        <option value="$PROJECT_DIR$/testing/test_damon.py" />
       </list>
     </option>
   </component>
@@ -161,6 +141,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -177,7 +158,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -196,7 +176,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_paladin.test_mov_avg">
+  <component name="RunManager" selected="Python tests.pytest for test_damon.test_correlation_main">
     <configuration name="correlation" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="paladin-src" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -218,7 +198,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_paladin.test_broker" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_damon.test_correlation_main" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="paladin-src" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -229,11 +209,11 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_paladin.test_broker&quot;" />
+      <option name="_new_target" value="&quot;test_damon.test_correlation_main&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_paladin.test_charts" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for testing.test_damon" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="paladin-src" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -244,11 +224,11 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_paladin.test_charts&quot;" />
+      <option name="_new_target" value="&quot;testing.test_damon&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_paladin.test_correlation_main" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for testing.test_damon.test_broker" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="paladin-src" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -259,11 +239,11 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_paladin.test_correlation_main&quot;" />
+      <option name="_new_target" value="&quot;testing.test_damon.test_broker&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_paladin.test_mov_avg" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for testing.test_damon.test_correlation_main" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="paladin-src" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -274,17 +254,17 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_paladin.test_mov_avg&quot;" />
+      <option name="_new_target" value="&quot;testing.test_damon.test_correlation_main&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_paladin.test_mov_avg" />
-        <item itemvalue="Python tests.pytest for test_paladin.test_broker" />
-        <item itemvalue="Python tests.pytest for test_paladin.test_correlation_main" />
+        <item itemvalue="Python tests.pytest for test_damon.test_correlation_main" />
+        <item itemvalue="Python tests.pytest for testing.test_damon" />
+        <item itemvalue="Python tests.pytest for testing.test_damon.test_broker" />
+        <item itemvalue="Python tests.pytest for testing.test_damon.test_correlation_main" />
         <item itemvalue="Python.correlation" />
-        <item itemvalue="Python tests.pytest for test_paladin.test_charts" />
       </list>
     </recent_temporary>
   </component>
@@ -302,15 +282,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="pytest_for_test_paladin_test_mov_avg - 2019.03.12 at 09h 56m 24s.xml">
-      <configuration name="pytest for test_paladin.test_mov_avg" configurationId="tests" />
-    </history-entry>
-    <history-entry file="pytest_for_test_paladin_test_mov_avg - 2019.03.12 at 10h 06m 13s.xml">
-      <configuration name="pytest for test_paladin.test_mov_avg" configurationId="tests" />
-    </history-entry>
-    <history-entry file="pytest_for_test_paladin_test_mov_avg - 2019.03.12 at 10h 10m 22s.xml">
-      <configuration name="pytest for test_paladin.test_mov_avg" configurationId="tests" />
-    </history-entry>
     <history-entry file="pytest_for_test_paladin_test_mov_avg - 2019.03.12 at 10h 11m 21s.xml">
       <configuration name="pytest for test_paladin.test_mov_avg" configurationId="tests" />
     </history-entry>
@@ -332,12 +303,21 @@
     <history-entry file="pytest_for_test_paladin_test_mov_avg - 2019.03.12 at 10h 15m 57s.xml">
       <configuration name="pytest for test_paladin.test_mov_avg" configurationId="tests" />
     </history-entry>
+    <history-entry file="pytest_for_test_damon_test_correlation_main - 2019.03.17 at 09h 26m 54s.xml">
+      <configuration name="pytest for test_damon.test_correlation_main" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_for_test_damon_test_correlation_main - 2019.03.17 at 09h 27m 41s.xml">
+      <configuration name="pytest for test_damon.test_correlation_main" configurationId="tests" />
+    </history-entry>
+    <history-entry file="pytest_for_test_damon_test_correlation_main - 2019.03.17 at 09h 29m 46s.xml">
+      <configuration name="pytest for test_damon.test_correlation_main" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1321" height="803" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.31665364" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3213448" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -422,26 +402,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/broker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/correlation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/movingaverage.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -466,10 +426,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/testing/test_paladin.py">
+    <entry file="file://$PROJECT_DIR$/correlation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+        <state relative-caret-position="225">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/broker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="38" lean-forward="true" selection-start-line="9" selection-start-column="38" selection-end-line="9" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testing/test_damon.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+          <folding>
+            <element signature="e#39#64#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

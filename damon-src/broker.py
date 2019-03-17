@@ -4,7 +4,7 @@ from tutor import *
 from exceptions import SourceException
 
 
-sources = ['yahoo']  # 'morningstar', 'google', 'quandl'] could do more but they don't work
+sources = ['yahoo']  # 'morningstar', 'google', 'quandl'], could do more but they don't work
 
 
 # tickers must be list even singularly
@@ -19,7 +19,7 @@ def broker(tickers, source, start_date, end_date):
         data['R50'] = data.rolling(50).mean()
         data['R200'] = data.rolling(200).mean()
         # dataset.describe().to_csv(f'{symbol}-describe.csv') <- append to front/back of CSV
-        data.to_csv(f"/Users/connormcmurry/Desktop/Hesiod Financial/hLabs/HYPAR/broker/broker-src/{symbol}.csv")
+        # data.to_csv(wherever we should store the files)
     if len(datasets) is 1:
         return datasets[0]
     return datasets
