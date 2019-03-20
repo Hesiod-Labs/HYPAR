@@ -1,6 +1,5 @@
 import scipy
 import numpy as np
-from scipy import exp, stats, log, sqrt
 from scipy.stats import norm
 import pandas as pd
 import pandas_datareader.data as pdr
@@ -21,19 +20,6 @@ def brownian_motion(dt=0.1, N=1000):
     t = scipy.linspace(0, N, N+1)
     W[1:N+1] = scipy.cumsum(scipy.random.normal(0,dt,N))
     return t, W
-
-
-# play is call or put
-def blackscholes_model(stock_price, strike_price, expiration, risk_free_rate, sigma, play):
-    # example parameters: stock_price = 100, strike_price = 100, expiration = 1 aka 1 year, rfr = 0.05, sigma = 2
-    d1 = (log(stock_price/strike_price)+(risk_free_rate+sigma*sigma/2.0)*expiration)/(sigma*sqrt(expiration))
-    d2 = d1 - sigma*sqrt(expiration)
-    if play is 'call':
-        return stock_price * stats.norm.cdf(d1) - strike_price * exp(-risk_free_rate * expiration) * stats.norm.cdf(d2)
-    elif play is 'put':
-        return -stock_price * stats.norm.cdf(-d1) + strike_price * exp(-risk_free_rate * expiration)*stats.norm.cdf(-d2)
-    else:
-        raise AttributeError
 
 
 # if we want to calculate VaR for tomorrow

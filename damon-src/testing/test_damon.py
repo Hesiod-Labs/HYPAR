@@ -1,6 +1,7 @@
 # testing class for the paladin method
 from broker import broker
 from correlation import *
+from blackscholes import blackscholes
 
 
 def test_broker():
@@ -14,4 +15,9 @@ def test_correlation_main():
     print(correlation(amazon, 'AMZN', nvidia, 'NVDA'))
     correlation(amazon, 'AMZN', nvidia, 'NVDA', 'linear')
     correlation(amazon, 'AMZN', nvidia, 'NVDA', 'scatter')
+
+
+def test_black_scholes():
+# example parameters: stock_price = 100, strike_price = 100, expiration = 1 aka 1 year, rfr = 0.05, sigma = 2
+    print(blackscholes(100, 100, 1, 0.05, 2, 'call'))
 
