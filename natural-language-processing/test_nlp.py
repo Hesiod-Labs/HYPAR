@@ -1,7 +1,7 @@
 # test class
 
 import os
-from environments import Topic, VDE, CSV
+from vde_environment import Topic, VDE, CSV
 
 
 # creating a generic topic
@@ -22,13 +22,3 @@ def test_vde_environment():
 def test_csv_environment():
     CSV.topic_model('NMF', 'studentscores.zip', 'gender')
     CSV.topic_model('LDA', 'suiciderates.zip', 'country')
-
-
-# testing the sentiment analysis measurement methods
-def test_sentiment_analysis():
-    print('complete me')
-
-
-# testing the read module machine learning class
-def test_read_module():
-    print('complete me')
