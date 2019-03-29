@@ -1,0 +1,177 @@
+https://github.com/RomelTorres/alpha_vantage
+key = 'YJWXREJ7AXYQX6J7'
+
+Time Series:
+get_intraday(self, symbol, interval='15min', outputsize='compact'):
+- Return intraday time series in two json objects as data and meta_data
+- Keyword Arguments: symbol - the symbol for the equity we want to get its data
+                     interval - time interval between two consecutive values,
+                                supported values are '1min', '5min', '15min', '30min', '60min' (default '15min')
+                     outputsize - The size of the call, supported values are 'compact' and 'full; the first returns the
+                                  last 100 points in the data series, and 'full' returns the full-length intraday times
+                                  series, commonly above 1MB (default 'compact')
+
+
+get_daily(self, symbol, outputsize='compact'):
+- Return daily time series in two json objects as data and meta_data
+get_daily_adjusted(self, symbol, outputsize='compact'):
+- Return daily adjusted (date, daily open, daily high, daily low, daily close, daily split/dividend-adjusted close, daily volume)
+  time series in two json objects as data and meta_data
+- Keyword Arguments: symbol - the symbol for the equity we want to get its data
+                     outputsize - The size of the call, supported values are 'compact' and 'full; the first returns the
+                                  last 100 points in the data series, and 'full' returns the full-length intraday times
+                                  series, commonly above 1MB (default 'compact')
+
+
+get_weekly(self, symbol):
+- Return weekly time series in two json objects as data and meta_data
+get_weekly_adjusted(self, symbol):
+- Return weekly adjusted time series (last trading day of each week, weekly open, weekly high, weekly low, weekly close, weekly
+  adjusted close, weekly volume, weekly dividend) of the equity specified, covering up to 20 years of historical data.
+get_monthly(self, symbol):
+- Return monthly time series in two json objects as data and meta_data
+get_batch_stock_quotes(self, symbols):
+- Return multiple stock quotes with a single request
+get_quote_endpoint(self, symbol):
+- Return the latest price and volume information for a security of your choice
+-Keyword Arguments: symbol - the symbol for the equity we want to get its data
+
+
+get_symbol_search(self, keywords):
+- Return best matching symbols and market information based on keywords
+- Keyword Arguments: keywords - the keywords to query on
+
+
+
+Technical Indicators:
+method(self, symbol, interval='daily')
+symbol - the symbol for the equity we want to get its data
+interval - time interval between two consecutive values, supported values are '1min', '5min',
+           '15min', '30min', '60min', 'daily', 'weekly', 'monthly' (default 'daily')
+
+get_obv: return the on balance volume values in two json objects as data and meta_data.
+get_ad: return the Chaikin A/D line values in two json objects as data and meta_data
+get_trange: return the true range values in two json objects as data and meta_data
+
+
+method(self, symbol, interval='daily', time_period=20)
+time_period - How many data points to average (default 20)
+
+get_minus_di: return the minus directional indicator values in two json objects as data and meta_data
+get_plus_di: return the plus directional indicator values in two json objects as data and meta_data
+get_minus_dm: return the minus directional movement values in two json objects as data and meta_data
+get_plus_dm: return the plus directional movement values in two json objects as data and meta_data
+get_atr: return the average true range values in two json objects as data and meta_data
+get_natr: return the normalized average true range values in two json objects as data and meta_data
+get_midprice: return the midprice values in two json objects as data and meta_data
+get_bop: return the balance of power values in two json objects as data and meta_data
+def get_cci: return the commodity channel index values  in two json objects as data and meta_data
+
+
+method(self, symbol, interval='daily', time_period=20, series_type='close')
+series_type - The desired price type in the time series. Types supported: 'close', 'open', 'high', 'low' (default 'close')
+
+get_ema: return exponential moving average time series in two json objects as data and meta_data
+get_wma: return weighted moving average time series in two json objects as data and meta_data
+get_dema: return double exponential moving average time series in two json objects as data and meta_data
+get_tema: return triple exponential moving average time series in two json objects as data and meta_data
+get_trima: return triangular moving average time series in two json objects as data and meta_data
+get_kama: return Kaufman adaptative moving average time series in two json objects as data and meta_data
+get_t3: return triple exponential moving average time series in two json objects as data and meta_data
+get_stoch: return the stochatic oscillator values in two json objects as data and meta_data
+get_rsi: return the relative strength index time series in two json objects as data and meta_data
+get_willr: return the Williams' %R (WILLR) values in two json objects as data and meta_data
+get_adx: return  the average directional movement index values in two json objects as data and meta_data
+get_adxr: return  the average directional movement index  rating in two json objects as data and meta_data
+get_stochf: return the stochatic oscillator values in two json objects as data and meta_data
+get_stochrsi: return the stochatic relative strength index in two json objects as data and meta_data
+get_mom: return the momentum values in two json objects as data and meta_data
+get_cmo: return the Chande momentum oscillator in two json objects as data and meta_data
+get_roc: return the rate of change values in two json objects as data and meta_data
+get_rocr: return the rate of change ratio values in two json objects as data and meta_data
+get_aroon: return the aroon values in two json objects as data and meta_data
+get_aroonosc: return the aroon oscillator values in two json objects as data and meta_data
+get_mfi: return the money flow index values in two json objects as data and meta_data
+get_trix: return the1-day rate of change of a triple smooth exponential moving average in two json objects as data and meta_data.
+get_dx: return the directional movement index values in two json objects as data and meta_data
+get_midpoint: return the midpoint values in two json objects as data and meta_data
+get_ht_trendline: return the Hilbert transform, instantaneous trendline values in two json objects as data and meta_data
+get_ht_sine: return the Hilbert transform, sine wave values in two json objects as data and meta_data
+get_ht_trendmode: return the Hilbert transform, trend vs cycle mode in two json objects as data and meta_data
+get_ht_dcperiod: return the Hilbert transform, dominant cycle period in two json objects as data and meta_data
+get_ht_dcphase: return the Hilbert transform, dominant cycle phase in two json objects as data and meta_data
+get_ht_phasor: return the Hilbert transform, phasor components in two json objects as data and meta_data
+
+
+method(self, symbol, interval='daily', series_type='close', fastperiod=None, slowperiod=None, matype=None)
+matype :  Moving average type. By default, matype=0.
+fastperiod - Positive integers are accepted (default=None)
+slowperiod - Positive integers are accepted (default=None)
+
+get_apo: return the absolute price oscillator values in two json objects as data and meta_data
+get_ppo: return the percentage price oscillator values in two json objects as data and meta_data
+
+def get_ultsoc(self, symbol, interval='daily', timeperiod1=None, timeperiod2=None, timeperiod3=None):
+- Return the ultimate oscillaror values in two json objects as data and meta_data
+
+get_bbands(self, symbol, interval='daily', time_period=20,  series_type='close', nbdevup=None, nbdevdn=None, matype=None):
+- Return the bollinger bands values in two json objects as data and meta_data. It raises ValueError when problems
+
+get_sar(self, symbol, interval='daily', acceleration=None, maximum=None):
+- Return the midprice values in two json objects as data and meta_data. It raises ValueError when problems arise
+
+get_adosc(self, symbol, interval='daily', fastperiod=None, slowperiod=None):
+- Return the Chaikin A/D oscillator values in two json objects as data and meta_data
+
+get_mama(self, symbol, interval='daily', series_type='close', fastlimit=None, slowlimit=None):
+- Return MESA adaptative moving average time series in two json objects as data and meta_data
+
+get_macd(self, symbol, interval='daily', series_type='close', fastperiod=None, slowperiod=None, signalperiod=None):
+- Return the moving average convergence/divergence time series in two json objects as data and meta_data
+
+get_macdext(self, symbol, interval='daily', series_type='close', fastperiod=None, slowperiod=None, signalperiod=None,
+                              fastmatype=None, slowmatype=None, signalmatype=None):
+- Return the moving average convergence/divergence time series in two json objects as data and meta_data
+
+
+- Keyword Arguments:
+                     fastlimit - Positive floats for the fast limit are accepted (default=None)
+                     slowlimit - Positive floats for the slow limit are accepted (default=None)
+                     --------------------------------------------------------------------------
+                     signalperiod - Positive integers are accepted (default=None)
+                     --------------------------------------------------------------------------
+                     fastmatype - Moving average type for the faster moving average. By default, fastmatype=0.
+                                  Integers 0 - 8 are accepted (check  down the mappings) or the string containing the
+                                  math type can also be used.
+                     slowmatype - Exact same as fastma except the slower moving average
+                     signalmatype - Exact same as slow and fastma except the signal moving average
+                     ---------------------------------------------------------------------------------------------------
+                     0 = Simple Moving Average (SMA),
+                     1 = Exponential Moving Average (EMA),
+                     2 = Weighted Moving Average (WMA),
+                     3 = Double Exponential Moving Average (DEMA),
+                     4 = Triple Exponential Moving Average (TEMA),
+                     5 = Triangular Moving Average (TRIMA),
+                     6 = T3 Moving Average,
+                     7 = Kaufman Adaptive Moving Average (KAMA),
+                     8 = MESA Adaptive Moving Average (MAMA)
+                     ---------------------------------------------------------------------------------------------------
+                     acceleration:  The acceleration factor. Positive floats are accepted (default 0.01)
+                     maximum:  The acceleration factor maximum value. Positive floats are accepted (default 0.20 )
+                     ---------------------------------------------------------------------------------------------------
+                     nbdevup:  The standard deviation multiplier of the upper band. Positive integers are accepted as default (default=2)
+                     nbdevdn:  The standard deviation multiplier of the lower band. Positive integers are accepted as default (default=2)
+                     ---------------------------------------------------------------------------------------------------
+                     timeperiod1:  The first time period indicator. Positive integers are accepted. By default, timeperiod1=7
+                     timeperiod2:  The first time period indicator. Positive integers are accepted. By default, timeperiod2=14
+                     timeperiod3:  The first time period indicator. Positive integers are accepted. By default, timeperiod3=28
+                     ---------------------------------------------------------------------------------------------------
+                     fastkperiod:  The time period of the fastk moving average. Positive integers are accepted (default=None)
+                     slowkperiod:  The time period of the slowk moving average. Positive integers are accepted (default=None)
+                     slowdperiod: The time period of the slowd moving average. Positive integers are accepted (default=None)
+                     slowkmatype:  Moving average type for the slowk moving average.
+                     ---------------------------------------------------------------------------------------------------
+                     fastkperiod:  The time period of the fastk moving average. Positive integers are accepted (default=None)
+                     fastdperiod:  The time period of the fastd moving average. Positive integers are accepted (default=None)
+                     fastdmatype:  Moving average type for the fastdmatype moving average.
+

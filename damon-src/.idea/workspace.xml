@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f62d26ac-c28a-4a0a-b711-b9508533c87e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/blackscholes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modeling.py" beforeDir="false" afterPath="$PROJECT_DIR$/modeling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing/test_damon.py" beforeDir="false" afterPath="$PROJECT_DIR$/testing/test_damon.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alpha_vantage.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../natural-language-processing/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../natural-language-processing/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,21 +15,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/blackscholes.py">
+        <entry file="file://$PROJECT_DIR$/alpha_vantage.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/testing/test_damon.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <folding>
-                <element signature="e#39#64#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="135">
+              <caret line="9" column="71" selection-start-line="9" selection-start-column="71" selection-end-line="9" selection-end-column="71" />
             </state>
           </provider>
         </entry>
@@ -81,6 +69,7 @@
         <option value="$PROJECT_DIR$/black-scholes.py" />
         <option value="$PROJECT_DIR$/testing/test_damon.py" />
         <option value="$PROJECT_DIR$/blackscholes.py" />
+        <option value="$PROJECT_DIR$/alpha_vantage.txt" />
       </list>
     </option>
   </component>
@@ -262,7 +251,7 @@
     <frame x="0" y="23" width="1321" height="803" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.33072713" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.34089133" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -308,7 +297,6 @@
     <entry file="file://$PROJECT_DIR$/tutor copy.py" />
     <entry file="file://$PROJECT_DIR$/paladin-libraries.py" />
     <entry file="file://$PROJECT_DIR$/methods.py" />
-    <entry file="file://$PROJECT_DIR$/blackscholes.py" />
     <entry file="file://$PROJECT_DIR$/var.py" />
     <entry file="file://$PROJECT_DIR$/capm.py" />
     <entry file="file://$PROJECT_DIR$/ml_models.py" />
@@ -382,6 +370,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/blackscholes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/testing/test_damon.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -391,10 +386,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/blackscholes.py">
+    <entry file="file://$PROJECT_DIR$/alpha_vantage.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+        <state relative-caret-position="135">
+          <caret line="9" column="71" selection-start-line="9" selection-start-column="71" selection-end-line="9" selection-end-column="71" />
         </state>
       </provider>
     </entry>
