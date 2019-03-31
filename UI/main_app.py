@@ -20,11 +20,13 @@ class DashboardApp(QDialog):
         super().__init__()
         self.main_page = MainPage()
         self.main_page.setupUi(self)
-        self.ticker =
+        self.ticker = ticker
+        self.main_page.Stock.setText(ticker)
         self.main_page.MacD.clicked.connect(self.macd)
         self.main_page.RSI.clicked.connect(self.rsi)
         self.main_page.MovAvg.clicked.connect(self.moving_average)
         self.main_page.BBands.clicked.connect(self.bollinger_bands)
+        # self.main_page.NewTicker.clicked.connect(self.set_new_ticker())
         self.show()
 
     def macd(self):
@@ -54,3 +56,10 @@ class DashboardApp(QDialog):
         self.main_page.Graphic.plot()
         self.main_page.Graphic.show()
         self.main_page.GraphicLabel.setText(f'Bollinger Bands: {self.ticker}')
+
+    def set_new_ticker(self):
+        # make it so the page refreshes
+        if self.main_page.TickerSearch.text():
+            self.ticker = self.main_page.TickerSearch.text()
+            self.main_page.Stock.setText(self.main_page.TickerSearch.text())
+

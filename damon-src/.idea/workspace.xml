@@ -2,8 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f62d26ac-c28a-4a0a-b711-b9508533c87e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/alpha_vantage.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UI/.idea/UI.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UI/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UI/.idea/libraries/R_User_Library.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UI/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UI/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UI/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UI/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../UI/main_app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alpha_vantage.txt" beforeDir="false" afterPath="$PROJECT_DIR$/alpha_vantage.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../natural-language-processing/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../natural-language-processing/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +25,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/alpha_vantage.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="71" selection-start-line="9" selection-start-column="71" selection-end-line="9" selection-end-column="71" />
+            <state relative-caret-position="190">
+              <caret line="122" column="51" lean-forward="true" selection-start-line="122" selection-start-column="51" selection-end-line="122" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -35,6 +43,9 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>perc</find>
+      <find>rsi</find>
+      <find>get_ma</find>
+      <find>moving average</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -76,7 +87,7 @@
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1321" />
-    <option name="height" value="803" />
+    <option name="height" value="811" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -248,10 +259,10 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1321" height="803" extended-state="0" />
+    <frame x="0" y="23" width="1321" height="811" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.34089133" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1657545" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -388,8 +399,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/alpha_vantage.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="71" selection-start-line="9" selection-start-column="71" selection-end-line="9" selection-end-column="71" />
+        <state relative-caret-position="190">
+          <caret line="122" column="51" lean-forward="true" selection-start-line="122" selection-start-column="51" selection-end-line="122" selection-end-column="51" />
         </state>
       </provider>
     </entry>

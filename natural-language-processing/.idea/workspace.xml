@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e1b7605-2651-46fe-bebc-26d151bb8cb6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/csv_environment.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vde_environment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/environments.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/machinelearning.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sentimentanalysis.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_nlp.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_nlp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tutor.py" beforeDir="false" afterPath="$PROJECT_DIR$/tutor.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vde_environment.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="14" lean-forward="true" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
+            <state relative-caret-position="240">
+              <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
               <folding>
                 <element signature="e#48#60#0" expanded="true" />
               </folding>
@@ -35,7 +28,7 @@
         <entry file="file://$PROJECT_DIR$/csv_environment.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="90">
-              <caret line="6" column="16" lean-forward="true" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
+              <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -43,8 +36,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_nlp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="3" lean-forward="true" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
+            <state relative-caret-position="195">
+              <caret line="14" column="3" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
               <folding>
                 <element signature="e#14#23#0" expanded="true" />
               </folding>
@@ -55,7 +48,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tutor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="301">
+            <state relative-caret-position="750">
               <caret line="55" column="38" selection-start-line="55" selection-start-column="38" selection-end-line="55" selection-end-column="38" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
@@ -67,8 +60,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/engine.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+            <state relative-caret-position="30">
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
               <folding>
                 <element signature="e#0#61#0" expanded="true" />
               </folding>
@@ -155,9 +148,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1333" height="803" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25329202" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26103795" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -191,9 +183,38 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/readme copy.txt" />
+    <entry file="file://$PROJECT_DIR$/machinelearning.py" />
+    <entry file="file://$PROJECT_DIR$/sentimentanalysis.py" />
+    <entry file="file://$PROJECT_DIR$/vde_environment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+          <folding>
+            <element signature="e#48#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/csv_environment.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_nlp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="14" column="3" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
+          <folding>
+            <element signature="e#14#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tutor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
+        <state relative-caret-position="750">
           <caret line="55" column="38" selection-start-line="55" selection-start-column="38" selection-end-line="55" selection-end-column="38" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
@@ -203,57 +224,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/engine.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        <state relative-caret-position="30">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
           <folding>
             <element signature="e#0#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/machinelearning.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1605">
-          <caret line="107" column="23" lean-forward="true" selection-start-line="107" selection-start-column="23" selection-end-line="107" selection-end-column="23" />
-          <folding>
-            <element signature="e#16#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sentimentanalysis.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="34" column="49" lean-forward="true" selection-start-line="34" selection-start-column="49" selection-end-line="34" selection-end-column="49" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/csv_environment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="16" lean-forward="true" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_nlp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="3" lean-forward="true" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
-          <folding>
-            <element signature="e#14#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vde_environment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="14" lean-forward="true" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
-          <folding>
-            <element signature="e#48#60#0" expanded="true" />
           </folding>
         </state>
       </provider>

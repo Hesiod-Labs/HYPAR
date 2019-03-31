@@ -1,6 +1,14 @@
 https://github.com/RomelTorres/alpha_vantage
 key = 'YJWXREJ7AXYQX6J7'
 
+
+Main Four:
+Mac-D
+RSI
+Moving Average
+Bollinger Bands
+
+
 Time Series:
 get_intraday(self, symbol, interval='15min', outputsize='compact'):
 - Return intraday time series in two json objects as data and meta_data
