@@ -27,7 +27,6 @@ class Portfolio:
     def clear(self):
       self.stocks.clear()
 
-    # 6/2/19: changed from list_tickers()
     def preview(self):
       for i, s in enumerate(self.stocks):
         if s.anonymous:
@@ -35,7 +34,6 @@ class Portfolio:
         else:
           print(s.ticker, s.num_shares)
 
-    # 6/2/19: helper method get_stock
     def list_tickers(self):
       tickers = []
       for s in self.stocks:
