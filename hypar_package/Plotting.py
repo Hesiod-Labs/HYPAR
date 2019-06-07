@@ -10,7 +10,7 @@ register_matplotlib_converters()
 import scipy.stats as stats
 import numpy as np
 
-def time_series(portfolio, attribute='close', tickers, plot_title=None):
+def time_series(portfolio, tickers, attribute='close', plot_title=None):
 
     port_ticks  = portfolio.list_tickers()
 
