@@ -1,7 +1,6 @@
 import datetime
 import pandas as pd
 
-
 class Stock:
 
     def __init__(self, ticker, owned=True, num_shares=1, start_date=None,

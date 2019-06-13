@@ -1,12 +1,11 @@
 import pandas as pd
 import numpy as np
-import quandl 
+import quandl
 import pyEX.stocks as pyex
 import os
 import csv
 from hypar_package import Stock
 from hypar_package import Portfolio
-
 
 def generate_portfolio():
     """ Main method for creating a Portfolio that contains Stock and Stock data.
@@ -18,10 +17,10 @@ def generate_portfolio():
                 The user specifies the version of the IEX Cloud API to call.
                     - "stable" calls real API data; counts towards monthly API allowance
                     - "sandbox" calls fake API data; does not count towards monthly API allowance
-                
+
                 If the user has previously used that version before, the API token will be retrieved,
                 and does not require re-entering by the user.
-                
+
                 Returns:
                     API version corresponding token to collect data.
 
@@ -30,16 +29,16 @@ def generate_portfolio():
 
                 The pre-determined timefrimes align with those defined in the API.
                 Enter the number corresponding to the kind of data to call from the API.
-                Each number corresponds to a function defined by the pyEX library and 
+                Each number corresponds to a function defined by the pyEX library and
                 a unit cost (if using any other version of IEX besides "sandbox").
 
-                The input string of numbers are then split and subsequently used to call 
-                the method contained in pyEX, obtain the data from IEX, and assign it to the 
+                The input string of numbers are then split and subsequently used to call
+                the method contained in pyEX, obtain the data from IEX, and assign it to the
                 appropriate attribute of the Stock.
 
                 Returns:
                     IEX API call specifications (i.e., data types and timeframe)
-            
+
             generate_stock(ticker, position_in_list)
                 Main method for creating Stocks based on user specified information.
 
@@ -59,27 +58,27 @@ def generate_portfolio():
         The user specifies the version of the IEX Cloud API to call.
             - "stable" calls real API data; counts towards monthly API allowance
             - "sandbox" calls fake API data; does not count towards monthly API allowance
-        
+
         If the user has previously used that version before, the API token will be retrieved,
         and does not require re-entering by the user.
-        
+
         Returns:
             API version corresponding token to collect data.
         """
 
         # Name of the csv .txt file that contains user-specific API tokens
         tokens = 'iex_api_tokens.txt'
-    
+
         # Ask for which version of the API to call
         api_env = input('Enter "stable" for real data and "sandbox" for test data: ')
-        
+
         # Check if iex_api_tokens.txt exists
         if os.path.exists(tokens):
-        
+
             # Check to see if this version token exists in the .txt file
             with open(tokens, 'r') as csv_file:
                 reader = csv.DictReader(csv_file, delimiter=',')
-                
+
                 version_exists = [False, None]
 
                 for row in reader:
@@ -87,7 +86,7 @@ def generate_portfolio():
                     if row['version'] == api_env:
                         version_exists[0] = True
                         version_exists[1] = row['token']
-                
+
                 if version_exists[0]:
                     print('Version already exists')
                     api_key = version_exists[1]
@@ -101,7 +100,7 @@ def generate_portfolio():
                         fields = ['version', 'token']
                         writer = csv.DictWriter(csv_file, fieldnames=fields)
                         writer.writerow({'version': api_env, 'token': api_key})
-        
+
         # .txt file does not exist
         else:
             api_key = input('Enter your IEX Cloud API key: ')
@@ -114,18 +113,18 @@ def generate_portfolio():
                 writer.writerow({'version': api_env, 'token': api_key})
 
         return api_env, api_key
-    
+
     def define_iex_call():
 
         """ Set the timeframe and data to be collected from the API.
 
         The pre-determined timefrimes align with those defined in the API.
         Enter the number corresponding to the kind of data to call from the API.
-        Each number corresponds to a function defined by the pyEX library and 
+        Each number corresponds to a function defined by the pyEX library and
         a unit cost (if using any other version of IEX besides "sandbox").
 
-        The input string of numbers are then split and subsequently used to call 
-        the method contained in pyEX, obtain the data from IEX, and assign it to the 
+        The input string of numbers are then split and subsequently used to call
+        the method contained in pyEX, obtain the data from IEX, and assign it to the
         appropriate attribute of the Stock.
 
         Returns:
@@ -144,7 +143,7 @@ def generate_portfolio():
                     8: ('intraday_data', pyex.intradayDF, 1),
                     9: ('key_stats', pyex.keyStatsDF, 5),
                     10: ('price_target', pyex.priceTarget, 500)}
-        
+
         print('Type the numbers corresponding to the data of interest (separate with comma): ')
         print('[1] price data')
         print('[2] balance sheet')
@@ -156,17 +155,17 @@ def generate_portfolio():
         print('[8] intraday data')
         print('[9] key stats')
         print('[10] price target')
-        
+
         data = input()
         data = data.split(',')
-        
+
         for i, n in enumerate(data):
             data[i] = int(n)
-        
+
         return timeframe, data_dict, data
 
     def generate_stock(ticker, position_in_list):
-        
+
         """ Main method for creating Stocks based on user specified information.
 
         A Stock is first generated by setting its ticker, which is based on user input.
@@ -182,25 +181,25 @@ def generate_portfolio():
 
         for i in requested_data:
             if i == 1:
-                setattr(stock, ref_data[i][0], 
+                setattr(stock, ref_data[i][0],
                         ref_data[i][1](tickers[position_in_list],
                                         timeframe=timeframe,
-                                        token=api_key, 
+                                        token=api_key,
                                         version=api_env))
             else:
-                setattr(stock, ref_data[i][0], 
-                    ref_data[i][1](tickers[position_in_list], 
-                                    token=api_key, 
+                setattr(stock, ref_data[i][0],
+                    ref_data[i][1](tickers[position_in_list],
+                                    token=api_key,
                                     version=api_env))
         return stock
 
-    # Specify IEX information 
+    # Specify IEX information
     api_env, api_key = check_for_api_tokens()
 
     # Specify tickers to search
     tickers = input('Symbols (separate with comma): ')
     tickers = tickers.split(',')
-    
+
     for i, t in enumerate(tickers):
         tickers[i] = t.strip()
 

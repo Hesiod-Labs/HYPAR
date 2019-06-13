@@ -6,11 +6,26 @@ import numpy as np
 import pandas as pd
 import copy
 
-def spearman_corr_coeffs(portfolio, attribute='changePercent'):
+def spearman_corr_coeffs(portfolio, attribute='changePercent', absolute=True):
+	""" Calculate the Spearman rank correlation coefficient between
+	every Stock in the Portfolio. If absolute is True, then the absolute value
+    of the coefficients are calculated.
+
+		Returns:
+			NxN pandas DataFrame with N being the number of stocks 
+			in the Portfolio. The ij-th entry is the Spearman rank 
+			correlation coefficient between Stock i and Stock j.
+	"""
+	# Create an empty column to append coefficients
 	col = []
 
+	# Create a copy of the Portfolio 
 	port = copy.deepcopy(portfolio)
 
+	# Iterate through the list of Stocks in the Portfolio
+	# Calculate the Spearman rank correlation coefficient between 
+	# one Stock and every other Stock, and append this row to the
+	# list of columns
 	for s_i in port.stocks:
 		row = []
 		
@@ -21,20 +36,26 @@ def spearman_corr_coeffs(portfolio, attribute='changePercent'):
 
 		col.append(row)
 
+	# Create a pandas DataFrame to store the coefficients
+	# Label the column and row indices the Stock tickers
 	corr_matrix = pd.DataFrame(col, columns=port.list_tickers())
 	corr_matrix.index = port.list_tickers()
+
+    # If absolute is True, calculate the absolute value of the cofficents 
+    if absolute:
+        corr_matrix = np.abs(corr_matrix)
 
 	return corr_matrix
 
 def mean_spearman_corr_coeffs(portfolio, attribute='changePercent'):
 	pass
 
-def weighted_ranked_spearman_coeffs(portfolio):
+def weighted_ranked_spearman_coeffs(portfolio, absolute=True):
     
     """ Calculate the Spearman rank correlation coefficients (SRCC) of all
     Stocks in the Portfolio, weighted by their rank amongst all other
     pairwise correlation coefficients, and normalized by the number of 
-    Stocks.
+    Stocks.If absolute is True, use the absolute value of the coefficients.
 
     If there are N Stocks, then an N x N DataFrame is constructed such that 
     the ij-th entry is the SRCC between Stock i and Stock j. Excluding the 
@@ -46,7 +67,7 @@ def weighted_ranked_spearman_coeffs(portfolio):
     next to each other.
 
     Since the SRCC for the ij-th and ji-th entries are the same, they are assigned
-    identical ranks. Thus, the highest rank is (N*2 - 1). Weighted coefficients are
+    identical ranks. Thus, the highest rank is (N(N - 1))/2. Weighted coefficients are
     calculated by multiplying the rank value by the SRCC.
 
     The Stock pairs are then reorganized such that they are grouped by column "stock_i,"
@@ -65,7 +86,7 @@ def weighted_ranked_spearman_coeffs(portfolio):
     port = copy.deepcopy(portfolio)
 
     # Calculate the Spearman rank correlation coefficients for each pair of Stocks
-    initial_matrix = spearman_corr_coeffs(port)
+    initial_matrix = spearman_corr_coeffs(port, absolute=absolute)
     
     # Create the tabular list of Stock pairs and their correlation coefficients
     # Does not include each Stock with itself
@@ -110,10 +131,37 @@ def weighted_ranked_spearman_coeffs(portfolio):
     
     return summed.to_dict()
 
+def reduced_corr_portfolio(portfolio, absolute=True):
+    """ Using a copy of the Portfolio, the normalized, weighted Spearman rank correlation coefficients
+    are calculated. The Stock with the highest coefficient is removed from the Portfolio.
+
+    Returns:
+        A tuple with the first element being the ticker of the Stock removed from the Portfolio, and
+        the second element being a copy of the Portfolio without the Stock that was removed.
+    """
+
+    # Create a copy of the Portfolio
+    port = copy.deepcopy(portfolio)
+
+    # Calculate the absolute normalized, weighted Spearman rank correlation coefficients
+    corr_table = weighted_ranked_spearman_coeffs(portfolio, absolute=absolute)
+
+    # Obtain the ticker of the Stock with the highest correlation
+    stock_to_remove_ticker = list(weighted_ranked_spearman_coeffs(portfolio)['normalized weights'])[0]
+    port.remove_stock(port.get_stock(stock_to_remove_ticker))
+    return stock_to_remove_ticker, port
+
 def compare_corr_matrices():
 	pass
 
 def moments(portfolio, ticker, attribute='close', bias_correction=True):
+	""" Calculate the first, second, third, and fourth statistical moments
+	of a Stock's attribute data. 
+
+	Also determine if the data is normally distributed by applying the 
+	Jarque-Bera test. If the p-value is greater than 0.05, the data is
+	normally distributed.
+	"""
 	
 	if ticker in portfolio.list_tickers():
 		data = portfolio.get_stock(ticker).price_data[attribute].values
