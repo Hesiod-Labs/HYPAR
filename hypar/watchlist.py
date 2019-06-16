@@ -1,4 +1,4 @@
-import Portfolio
+import portfolio
 
 
 class Watchlist(Portfolio):
