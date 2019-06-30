@@ -1,11 +1,8 @@
-from hypar import stock
-from hypar import portfolio
-import pandas as pd
-import numpy as np
-import quandl
-import pyEX.stocks as pyex
-import os
 import csv
+import os
+import pyEX.stocks as pyex
+from hypar import portfolio
+from hypar import stock
 
 
 def generate_portfolio():
@@ -59,6 +56,7 @@ def generate_portfolio():
     Returns:
         The Portfolio containing user requested stocks and data.
     """
+
     def check_for_api_tokens():
         """Assigns the API token and version to use when calling the API.
 
@@ -77,7 +75,8 @@ def generate_portfolio():
         tokens = 'iex_api_tokens.txt'
 
         # Ask for which version of the API to call.
-        api_env = input('Enter "stable" for real data and "sandbox" for test data: ')
+        api_env = input(
+            'Enter "stable" for real data and "sandbox" for test data: ')
 
         # Check if iex_api_tokens.txt exists.
         if os.path.exists(tokens):
@@ -130,19 +129,21 @@ def generate_portfolio():
         Returns:
             IEX API call specifications (i.e., data types and timeframe)
         """
-        timeframe = input('Timeframe (max (15yr), 5y, 2y, 1y, ytd, 6m, 3m, 1m): ')
-        data_dict = {1: ('price_data', pyex.chartDF, 10),
-                    2: ('balance_sheet', pyex.balanceSheetDF, 3000),
-                    3: ('book_data', pyex.bookDF, 1),
-                    4: ('cash_flow', pyex.cashFlowDF, 1000),
-                    5: ('company_data', pyex.companyDF, 1),
-                    6: ('earnings', pyex.earningsDF, 1000),
-                    7: ('income_statement', pyex.incomeStatementDF, 1000),
-                    8: ('intraday_data', pyex.intradayDF, 1),
-                    9: ('key_stats', pyex.keyStatsDF, 5),
-                    10: ('price_target', pyex.priceTarget, 500)}
+        timeframe = input(
+            'Timeframe (max (15yr), 5y, 2y, 1y, ytd, 6m, 3m, 1m): ')
+        data_dict = {1: ('price_data', pyex.chart, 10),
+                     2: ('balance_sheet', pyex.balanceSheet, 3000),
+                     3: ('book_data', pyex.book, 1),
+                     4: ('cash_flow', pyex.cashFlow, 1000),
+                     5: ('company_data', pyex.company, 1),
+                     6: ('earnings', pyex.earnings, 1000),
+                     7: ('income_statement', pyex.incomeStatement, 1000),
+                     8: ('intraday_data', pyex.intraday, 1),
+                     9: ('key_stats', pyex.keyStats, 5),
+                     10: ('price_target', pyex.priceTarget, 500)}
 
-        print('Type the numbers corresponding to the data of interest (separate with comma): ')
+        print(
+            'Type the numbers corresponding to the data of interest (separate with comma): ')
         print('[1] price data')
         print('[2] balance sheet')
         print('[3] book data')
@@ -175,23 +176,24 @@ def generate_portfolio():
             A Stock object containing information on the stock.
         """
 
-        stock = Stock.Stock(ticker)
+        stk = stock.Stock(ticker)
 
         for i in requested_data:
             if i == 1:
-                setattr(stock,
+                setattr(stk,
                         ref_data[i][0],
                         ref_data[i][1](tickers[position_in_list],
-                        timeframe=timeframe,
-                        token=api_key,
-                        version=api_env))
+                                       timeframe=timeframe,
+                                       token=api_key,
+                                       version=api_env))
             else:
-                setattr(stock,
+                setattr(stk,
                         ref_data[i][0],
                         ref_data[i][1](tickers[position_in_list],
-                        token=api_key,
-                        version=api_env))
-        return stock
+                                       token=api_key,
+                                       version=api_env))
+
+        return stk
 
     # Specify IEX information.
     api_env, api_key = check_for_api_tokens()
@@ -204,7 +206,7 @@ def generate_portfolio():
         tickers[i] = t.strip()
 
     # Create an empty Portfolio to store the stocks.
-    portfolio = Portfolio.Portfolio()
+    port = portfolio.Portfolio()
 
     # Specify the IEX data and timeframe.
     timeframe, ref_data, requested_data = define_iex_call()
@@ -212,7 +214,10 @@ def generate_portfolio():
     # For each ticker listed by the user, create a Stock object
     # and add it to the Portfolio.
     for i, t in enumerate(tickers):
-        stock  = generate_stock(t, i)
-        portfolio.add_stock(stock)
+        stk = generate_stock(t, i)
+        stk.anonymous[port] = [False, None]
 
-    return portfolio
+        stk.portfolios.append(port)
+        port.add_stock(stk)
+
+    return port

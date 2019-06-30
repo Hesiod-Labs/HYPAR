@@ -1,11 +1,7 @@
-from hypar import portfolio
 import datetime
-import pandas as pd
-import numpy as np
 
 
 class Stock:
-
     # TODO Complete Attributes
     """A member unit of a Portfolio that contains numerous data attributes.
 
@@ -33,19 +29,19 @@ class Stock:
         intraday_data (dict):
         key_stats (dict):
         price_target (dict):
-        anonymous (dict[Portfolio, dict[bool, str]): Each key is Portfolio and
+        anonymous (dict[Portfolio, list[bool, str]): Each key is Portfolio and
             each value is a list pair: if index 0 is True, the Stock is
             "anonymous" and the pseudonym in index 1 string is displayed;
             otherwise, the real ticker is displayed. Pseudonym format is 'S-xxx'
-            where 'xxx' is a randomly generated intger between 0-999.
+            where 'xxx' is a randomly generated integer between 0-999.
     """
 
-    def __init__(self, ticker, portfolios=None, num_shares=[1],
-                start_date=None, end_date=None, price_data=None,
-                balance_sheet=None, book_data=None, cash_flow=None,
-                company_data=None, earnings=None, income_statement=None,
-                intraday_data=None, key_stats=None, price_target=None,
-                anonymous=None):
+    def __init__(self, ticker, portfolios=None, num_shares=None,
+                 start_date=None, end_date=None, price_data=None,
+                 balance_sheet=None, book_data=None, cash_flow=None,
+                 company_data=None, earnings=None, income_statement=None,
+                 intraday_data=None, key_stats=None, price_target=None,
+                 anonymous=None):
         """Instantiates a Stock with any associated data."""
         self.ticker = str.upper(ticker)
         # TODO Make this a set?
@@ -64,3 +60,16 @@ class Stock:
         self.key_stats = key_stats
         self.price_target = price_target
         self.anonymous = anonymous
+        self.handle_container_status('portfolios', container_type=list)
+        self.handle_container_status('num_shares',
+                                     'start_date',
+                                     'end_date',
+                                     'anonymous',
+                                     container_type=dict)
+
+    def handle_container_status(self, *attributes, container_type=list):
+        for a in attributes:
+            if getattr(self, a) is None:
+                setattr(self, a, container_type())
+            else:
+                setattr(self, a, a)
