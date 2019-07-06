@@ -1,28 +1,61 @@
-from hypar.stock import Stock as stock
-import pandas as pd
+from dataclasses import dataclass, field
+import datetime
 import numpy as np
-from collections import OrderedDict
+import pandas as pd
+from typing import List
+from stock import Stock
 
 
-class Portfolio:
+@dataclass(init=False)
+class Portfolio(object):
     """A collection of Stocks. Serves the purpose of collectively analyzing how
     a group of Stocks performs together over a duration of time. Analysis and
     group operations can be performed on a Portfolio as opposed to having to
-    apply the operation to each Stock separately.
+    apply the operation to each Stock and StockSegment(s) separately.
 
     Attributes:
-        *stocks (dict[str, Stock]): Stocks belonging to the Portfolio. The key
-            of each Stock is its ticker and the value is the Stock itself.
+        stocks (List[Stock]): Each Stock may contain more than one
+        StockSegment. Each StockSegment corresponds to a partition date in
+        which a unique sub-Portfolio exists.
     """
+    stocks: List[Stock] = field(default_factory=list)
+    partition_dates: List[List[datetime.datetime]] = field(default_factory=list)
 
-    def __init__(self, *stocks: stock):
-        """Instantiates a Portfolio that contains a dictionary of Stocks.
-        The key is the Stock ticker and the value is the Stock itself."""
-        # For each Stock in the list entered, create a dict entry with the
-        # key being the ticker and the value being the Stock itself.
-        self.stocks = OrderedDict({s.ticker: s for s in stocks})
+    def __init__(self, *args, **kwargs):
+        self.stocks = list(args)
+        self.partition_dates = self.partition()
+        self.__dict__.update(kwargs)
 
-    def add_stock(self, *stocks: stock):
+    def __repr__(self):
+        tickers = [t.ticker for t in self.stocks]
+        start = sorted([d.start_date for s in self.stocks for d in s.segments])
+        end = sorted([d.end_date for s in self.stocks for d in s.segments])
+        return f'{self.__class__.__name__}(stocks={tickers}, ' \
+            f'start={start[0]:%Y-%m-%d}, end={end[-1]:%Y-%m-%d})'
+
+    # TODO Add docstring
+    def partition(self):
+        # Create a start date set that will be used as primary condition for
+        # range setting, and to eliminate duplicates.
+        starts_set = set([s.start_date for d in self.stocks
+                          for s in d.segments])
+        # Create an end date set to eliminate duplicates.
+        ends_set = set([s.end_date for d in self.stocks
+                        for s in d.segments])
+        # Create a list of dates to iterate through to generate date ranges.
+        dates = list(starts_set) + list(ends_set)
+        # Sort so that the earliest dates are towards the beginning.
+        dates = sorted(dates)
+        # If either condition is satisfied, the dates are added as a range:
+        # 1. Date is a start date and is not the same as the next date.
+        # 2. Two consecutive dates are both end dates.
+        return [[d, dates[i + 1]] for i, d in enumerate(dates)
+                if (d in starts_set and d != dates[i + 1])
+                or (i + 2 <= len(dates) and d not in starts_set
+                    and dates[i + 1] not in starts_set)]
+
+    # TODO Deprecated - needs rewritten (7/6/19)
+    def add_stock(self, *stocks: Stock):
         """Adds Stocks to the Portfolio only if the do not already exist.
 
         Args:
@@ -30,7 +63,7 @@ class Portfolio:
         """
         # Only add the Stocks that are not already in the Portfolio.
 
-        if isinstance(stocks[0], stock):
+        if isinstance(stocks[0], Stock):
             new_stocks = set(stocks).difference(set(self.stocks.values()))
             to_add = {s.ticker: s for s in new_stocks}
             self.stocks.update(to_add)
@@ -40,13 +73,14 @@ class Portfolio:
             to_add = {s.ticker: s for s in new_stocks}
             self.stocks.update(to_add)
 
-    def remove_stock(self, *stocks: stock):
+    # TODO Deprecated - needs rewritten (7/6/19)
+    def remove_stock(self, *stocks: Stock):
         """Removes Stocks from the Portfolio only if they already exist.
 
         Args:
             *stocks (Stock): a Stock and its associated data
         """
-        if isinstance(stocks[0], stock):
+        if isinstance(stocks[0], Stock):
             # Only remove the Stocks that exist in the Portfolio.
             existing = set(stocks).intersection(set(self.stocks.values()))
             for s in existing:
@@ -57,6 +91,7 @@ class Portfolio:
             for s in existing:
                 del self.stocks[s]
 
+    # TODO Deprecated - needs rewritten (7/6/19)
     def clear(self):
         """Removes all Stocks from the Portfolio, but keeps the Portfolio."""
         # Clear the Portfolio if it contains Stocks
@@ -111,6 +146,7 @@ class Portfolio:
         columns = ['Number of Shares', 'Start', 'End']
         return pd.DataFrame(data=info, columns=columns, index=index)
 
+    # TODO Deprecated - needs rewritten (7/6/19)
     def total_shares(self):
         """Calculate the total number of shares owned for all Stocks.
 
@@ -119,6 +155,7 @@ class Portfolio:
         """
         return sum([n.num_shares[self] for n in self.stocks.values()])
 
+    # TODO Deprecated - needs rewritten (7/6/19)
     def anonymize(self):
         """Anonymize all Stocks in the Portfolio by setting the bool anonymous
         attribute to True. The ticker symbol is preserved, but is hidden when
@@ -152,6 +189,7 @@ class Portfolio:
             # Assign the Stock's anonymity state to True.
             stock_data.anonymous[self][0] = True
 
+    # TODO Deprecated - needs rewritten (7/6/19)
     def reveal(self):
         """ Reveal the ticker symbols of all Stocks in the Portfolio by setting
         each Stock's anonymity state to False.
@@ -159,6 +197,7 @@ class Portfolio:
         for s in self.stocks.values():
             s.anonymous[self][0] = False
 
+    # TODO Deprecated - needs rewritten (7/6/19)
     def get_data_slice(self, attribute: str, dated=True, as_dict=False):
         if dated:
             if as_dict:
@@ -166,7 +205,7 @@ class Portfolio:
                         for t, data in self.stocks.items()}
             else:
                 return [(t, [(s['date'], s[attribute])
-                        for s in data.price_data])
+                             for s in data.price_data])
                         for t, data in self.stocks.items()]
         else:
             if as_dict:
@@ -175,4 +214,3 @@ class Portfolio:
             else:
                 return [(t, [s[attribute] for s in data.price_data])
                         for t, data in self.stocks.items()]
-

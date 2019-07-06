@@ -1,12 +1,13 @@
 import csv
 import os
+import datetime
 import pyEX.stocks as pyex
-from hypar import portfolio
-from hypar import stock
+from portfolio import Portfolio
+from stock import StockData, StockSegment, Stock
 
 
 def generate_portfolio():
-    """ Main method for creating a Portfolio that contains Stock and Stock data.
+    """ Main method for creating a Portfolio that contains Stocks and data.
 
         Internal functions:
             check_for_api_tokens():
@@ -26,9 +27,9 @@ def generate_portfolio():
                     API version corresponding token to collect data.
 
             define_iex_call():
-                Set the timeframe and data to be collected from the API.
+                Set the time frame and data to be collected from the API.
 
-                The pre-determined timefrimes align with those defined in the
+                The pre-determined time frames align with those defined in the
                 API. Enter the number corresponding to the kind of data to call
                 from the API. Each number corresponds to a function defined by
                 the pyEX library and a unit cost (if using any other version of
@@ -36,12 +37,13 @@ def generate_portfolio():
 
                 The input string of numbers are then split and subsequently
                 used to call the method contained in pyEX, obtain the data from
-                IEX, and assign it to the appropriate attribute of the Stock.
+                IEX, and create StockSegments and Stocks.
 
                 Returns:
-                    IEX API call specifications (i.e., data types and timeframe)
-
-            generate_stock(ticker, position_in_list):
+                    IEX API call specifications (i.e., data types and time
+                    frame)
+            # TODO Update description
+            generate_stock_segment(ticker, start, end, position_in_list):
                 Main method for creating Stocks based on user specified
                 information.
 
@@ -49,7 +51,7 @@ def generate_portfolio():
                 based on user input. From the specified information to be
                 collected from IEX, a Stock's other attributes are subsequently
                 assigned with the appropriate information in accordance with
-                the IEX version, token, and timeframe.
+                the IEX version, token, and time frame.
 
                 Returns:
                     A Stock object containing information on the stock.
@@ -69,7 +71,7 @@ def generate_portfolio():
         be retrieved, and does not require re-entering by the user.
 
         Returns:
-            API version corresponding token to collect data.
+            API version's corresponding token to collect data.
         """
         # Name of the csv .txt file that contains user-specific API tokens.
         tokens = 'iex_api_tokens.txt'
@@ -115,68 +117,97 @@ def generate_portfolio():
         return api_env, api_key
 
     def define_iex_call():
-        """ Set the timeframe and data to be collected from the API.
+        """ Set the time frame and data to be collected from the API.
 
-        The pre-determined timefrimes align with those defined in the API.
-        Enter the number corresponding to the kind of data to call from the API.
-        Each number corresponds to a function defined by the pyEX library and
-        a unit cost (if using any other version of IEX besides "sandbox").
+        Enter the beginning and end of the time frame scope. This range is
+        used to define an appropriate time frame call to the API. Enter the
+        number corresponding to the kind of data to call from the API. Each
+        number corresponds to a function defined by the pyEX library and a
+        unit cost (if using any other version of IEX besides "sandbox").
 
         The input string of numbers are then split and subsequently used to
         call the method contained in pyEX, obtain the data from IEX, and assign
         it to the appropriate attribute of the Stock.
 
         Returns:
-            IEX API call specifications (i.e., data types and timeframe)
+            IEX API call specifications (i.e., data types and time frame)
         """
-        timeframe = input(
-            'Timeframe (max (15yr), 5y, 2y, 1y, ytd, 6m, 3m, 1m): ')
-        data_dict = {1: ('price_data', pyex.chart, 10),
-                     2: ('balance_sheet', pyex.balanceSheet, 3000),
-                     3: ('book_data', pyex.book, 1),
-                     4: ('cash_flow', pyex.cashFlow, 1000),
-                     5: ('company_data', pyex.company, 1),
-                     6: ('earnings', pyex.earnings, 1000),
-                     7: ('income_statement', pyex.incomeStatement, 1000),
-                     8: ('intraday_data', pyex.intraday, 1),
-                     9: ('key_stats', pyex.keyStats, 5),
-                     10: ('price_target', pyex.priceTarget, 500)}
+        p_start = input('Portfolio start (YYYY-MM-DD): ')
+        p_start = datetime.date.strptime(p_start, '%Y-%m-%d')
+        p_end = input('Portfolio end (YYYY-MM-DD): ')
+        p_end = datetime.date.strptime(p_end, '%Y-%m-%d')
 
-        print(
-            'Type the numbers corresponding to the data of interest (separate with comma): ')
-        print('[1] price data')
+        p_range = p_end - p_start
+        first_of_year = datetime.date.today().replace(month=1, day=1)
+        if p_range == datetime.date.today() - first_of_year:
+            time_frame = 'ytd'
+        elif p_range < datetime.timedelta(days=30):
+            time_frame = '1m'
+        elif p_range < datetime.timedelta(days=90):
+            time_frame = '3m'
+        elif p_range < datetime.timedelta(days=180):
+            time_frame = '6m'
+        elif p_range < datetime.timedelta(days=365):
+            time_frame = '1y'
+        elif p_range < datetime.timedelta(days=730):
+            time_frame = '2y'
+        elif p_range < datetime.timedelta(days=1825):
+            time_frame = '5y'
+        else:
+            time_frame = 'max'
+
+        data_dict = {1: ('interday_pricing', pyex.chart),
+                     2: ('balance_sheet', pyex.balanceSheet),
+                     3: ('book', pyex.book),
+                     4: ('cash_flow', pyex.cashFlow),
+                     5: ('company', pyex.company),
+                     6: ('earnings', pyex.earnings),
+                     7: ('estimate', pyex.estimates),
+                     8: ('income_statement', pyex.incomeStatement),
+                     9: ('intraday_pricing', pyex.intraday),
+                     10: ('ipo_today', pyex.ipoToday),
+                     11: ('ipo_upcoming', pyex.ipoUpcoming),
+                     12: ('key_stats', pyex.keyStats),
+                     13: ('price_target', pyex.priceTarget)}
+
+        print('Type the numbers corresponding to the data of interest ('
+              'separate with comma): ')
+        print('[1] interday pricing')
         print('[2] balance sheet')
         print('[3] book data')
         print('[4] cash flow')
         print('[5] company data')
         print('[6] earnings')
-        print('[7] income statement')
-        print('[8] intraday data')
-        print('[9] key stats')
-        print('[10] price target')
+        print('[7] analyst estimates')
+        print('[8] income statement')
+        print('[9] intraday pricing')
+        print('[10] IPO (today)')
+        print('[11] IPO (upcoming)')
+        print('[12] key stats')
+        print('[13] price target')
 
-        data = input()
-        data = data.split(',')
+        input_data = input()
+        input_data = input_data.split(',')
 
-        for i, n in enumerate(data):
-            data[i] = int(n)
+        for i, n in enumerate(input_data):
+            input_data[i] = int(n)
 
-        return timeframe, data_dict, data
-
-    def generate_stock(ticker, position_in_list):
+        return time_frame, data_dict, input_data
+    # TODO Update -- LEFT OFF HERE
+    def generate_stock_segment(ticker, start, end, position_in_list):
 
         """ Main method for creating Stocks based on user specified information.
 
         A Stock is first generated by setting its ticker, which is based on user
         input. From the specified information to be collected from IEX, a
         Stock's other attributes are subsequently assigned with the appropriate
-        information in accordance with the IEX version, token, and timeframe.
+        information in accordance with the IEX version, token, and time frame.
 
         Returns:
             A Stock object containing information on the stock.
         """
 
-        stk = stock.Stock(ticker)
+        stk = Stock(ticker)
 
         for i in requested_data:
             if i == 1:
@@ -206,7 +237,7 @@ def generate_portfolio():
         tickers[i] = t.strip()
 
     # Create an empty Portfolio to store the stocks.
-    port = portfolio.Portfolio()
+    port = Portfolio()
 
     # Specify the IEX data and timeframe.
     timeframe, ref_data, requested_data = define_iex_call()
