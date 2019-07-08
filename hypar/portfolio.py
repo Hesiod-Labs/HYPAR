@@ -2,8 +2,9 @@ from dataclasses import dataclass, field
 import datetime
 import numpy as np
 import pandas as pd
-from typing import List
-from stock import Stock
+from typing import Dict, List, Tuple
+
+from stock import Stock, StockSegment
 
 
 @dataclass(init=False)
@@ -19,11 +20,25 @@ class Portfolio(object):
         which a unique sub-Portfolio exists.
     """
     stocks: List[Stock] = field(default_factory=list)
+    segments: List[StockSegment] = field(default_factory=list)
     partition_dates: List[List[datetime.datetime]] = field(default_factory=list)
+    partitions: Dict[Tuple[datetime.datetime],
+                     List[StockSegment]] = field(default_factory=dict)
 
     def __init__(self, *args, **kwargs):
+        """Creates a Portfolio containing Stocks. Adds all Stocks to a list,
+        aggregates all StockSegments to a single StockSegment list,
+        and determines the partition dates that will determine how the
+        Portfolio is partitioned.
+
+        Arguments:
+            *args: Stocks
+            **kwargs: Any attribute meant to describe the Portfolio.
+        """
         self.stocks = list(args)
-        self.partition_dates = self.partition()
+        self.segments = [seg for s in self.stocks for seg in s.segments]
+        self.partition_dates = self.get_partition_dates()
+        self.partitions = self.partition()
         self.__dict__.update(kwargs)
 
     def __repr__(self):
@@ -34,14 +49,18 @@ class Portfolio(object):
             f'start={start[0]:%Y-%m-%d}, end={end[-1]:%Y-%m-%d})'
 
     # TODO Add docstring
-    def partition(self):
+    def get_partition_dates(self):
+        """Determines the start and end dates that partitions the Portfolio
+        based on its holdings. In the simplest case, there is a single
+        start-end date pair. This occurs when all holdings are held once
+        and continuously. Otherwise, more than one partition date pair exists
+        that signifies when the Portfolio's holdings change.
+        """
         # Create a start date set that will be used as primary condition for
         # range setting, and to eliminate duplicates.
-        starts_set = set([s.start_date for d in self.stocks
-                          for s in d.segments])
+        starts_set = set([s.start_date for s in self.segments])
         # Create an end date set to eliminate duplicates.
-        ends_set = set([s.end_date for d in self.stocks
-                        for s in d.segments])
+        ends_set = set([s.end_date for s in self.segments])
         # Create a list of dates to iterate through to generate date ranges.
         dates = list(starts_set) + list(ends_set)
         # Sort so that the earliest dates are towards the beginning.
@@ -54,52 +73,43 @@ class Portfolio(object):
                 or (i + 2 <= len(dates) and d not in starts_set
                     and dates[i + 1] not in starts_set)]
 
-    # TODO Deprecated - needs rewritten (7/6/19)
+    def partition(self):
+        """Partitions the Portfolio in accordance with its partition dates.
+        In the simplest case, there is one partition. That is, when all
+        holdings are held once and continuously. Otherwise, each partition
+        signifies a change in holdings.
+
+        Creates an empty dictionary to store the partitions such that each
+        partition date pair tuple is the key and the StockSegments owned during
+        that time are the values as a list.
+        """
+        partitions = dict()
+        for p_date in self.partition_dates:
+            for seg in self.segments:
+                if seg.start_date <= p_date[0] and seg.end_date >= p_date[1]:
+                    if tuple(p_date) in set(partitions.keys()):
+                        partitions[tuple(p_date)].append(seg)
+                    else:
+                        partitions[tuple(p_date)] = [seg]
+        return partitions
+
+    # TODO Update Portfolio.segments
     def add_stock(self, *stocks: Stock):
-        """Adds Stocks to the Portfolio only if the do not already exist.
+        existing = set(self.stocks)
+        for stock in stocks:
+            if stock not in existing:
+                self.stocks.append(stock)
+        self.partition_dates = self.get_partition_dates()
+        self.partitions = self.partition()
 
-        Args:
-            *stocks (Stock): A Stock and its associated data
-        """
-        # Only add the Stocks that are not already in the Portfolio.
-
-        if isinstance(stocks[0], Stock):
-            new_stocks = set(stocks).difference(set(self.stocks.values()))
-            to_add = {s.ticker: s for s in new_stocks}
-            self.stocks.update(to_add)
-        # TODO Write function to collect data for new stocks
-        if isinstance(stocks[0], str):
-            new_stocks = set(stocks).difference(set(self.stocks.keys()))
-            to_add = {s.ticker: s for s in new_stocks}
-            self.stocks.update(to_add)
-
-    # TODO Deprecated - needs rewritten (7/6/19)
+    # TODO Update Portfolio.segments
     def remove_stock(self, *stocks: Stock):
-        """Removes Stocks from the Portfolio only if they already exist.
-
-        Args:
-            *stocks (Stock): a Stock and its associated data
-        """
-        if isinstance(stocks[0], Stock):
-            # Only remove the Stocks that exist in the Portfolio.
-            existing = set(stocks).intersection(set(self.stocks.values()))
-            for s in existing:
-                del self.stocks[s.ticker]
-
-        if isinstance(stocks[0], str):
-            existing = set(stocks).intersection(set(self.stocks.keys()))
-            for s in existing:
-                del self.stocks[s]
+        existing = set(self.stocks)
+        for stock in stocks:
+            if stock in existing:
+                self.stocks.remove(stock)
 
     # TODO Deprecated - needs rewritten (7/6/19)
-    def clear(self):
-        """Removes all Stocks from the Portfolio, but keeps the Portfolio."""
-        # Clear the Portfolio if it contains Stocks
-        if len(self.stocks.keys()) != 0:
-            self.stocks.clear()
-        else:
-            print('Portfolio is already empty')
-
     def preview(self, anon=False):
         """Displays a table that contains each Stock, referred to by
         ticker (or pseudonym), the start and end dates of the data, and the

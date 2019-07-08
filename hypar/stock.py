@@ -1,9 +1,11 @@
+from bisect import bisect_left
 from dataclasses import dataclass, field
 import datetime
 from typing import List, Dict, Any
 
 
 @dataclass(order=True)
+# TODO Inherits StockData? How to reference same data for Segment and Stock?
 class StockSegment(object):
     """Usually a portion of an entire holding of a Stock, but could also be
     equivalent to the Stock itself if held continuously over the entire
@@ -17,17 +19,20 @@ class StockSegment(object):
     different number of shares and dates.
 
     Attributes:
-        ticker (str): Ticker symbol of the Stock.
+        sort_index (datetime.datetime): Used to compare by start date.
+        _ticker (str): Ticker symbol of the Stock.
         num_shares (int): Number of shares owned..
-        start_date (datetime): Starting date; not necessarily
-        end_date (datetime): Ending date of the StockSegment.
+        start_date (datetime.datetime): Starting date; not necessarily
+        end_date (datetime.datetime): Ending date of the StockSegment.
         anonymous (bool): True if the StockSegment is to be referred to by its
             pseudonym, and otherwise implies the StockSegment should be referred
             to by its ticker symbol.
         pseudonym (str): "S-XXX" where "XXX" is a pseudo-randomly generated
-            integer between 100 and 999.
+            integer between 100 and 999. Used in place of the ticker when the
+            StockSegment is supposed to be anonymous.
     """
-    ticker: str = None
+    sort_index: datetime.datetime = field(init=False, repr=False)
+    _ticker: str = None
     start_date: datetime.datetime = None
     end_date: datetime.datetime = None
     num_shares: int = 1
@@ -35,12 +40,23 @@ class StockSegment(object):
     pseudonym: str = field(default=None, repr=False)
 
     def __post_init__(self):
+        self.sort_index = self.start_date
         self.ticker = self.ticker.upper()
 
     def __repr__(self):
         return f'{self.__class__.__name__}(ticker={self.ticker}, ' \
             f'start={self.start_date:%Y-%m-%d}, end={self.end_date:%Y-%m-%d})'
 
+    @property
+    def ticker(self):
+        if self.anonymous:
+            return self.pseudonym
+        else:
+            return self._ticker
+
+    @ticker.setter
+    def ticker(self, t: str):
+        self._ticker = t
 
 # TODO(Ryan) Specify type hints in more detail -- refer to PEP 483 and 484:
 # https://www.python.org/dev/peps/pep-0483/#notational-conventions
@@ -111,15 +127,23 @@ class Stock(StockSegment):
         segments (List[StockSegment]): One or more StockSegments that contain
             uniform StockData. If there is only one continuous holding of a
             StockSegment, then the Stock and the single StockSegment are
-            equivalent.
+            equivalent. StockSegments are to remain sorted by start date.
     """
     segments: List[StockSegment] = field(default_factory=list)
 
     def __init__(self, *args, **kwargs):
+        """Creates a Stock from one or more StockSegments.
+
+        Arguments:
+            *args: One or more StockSegments.
+            **kwargs: Any attribute that is intended to describe a Stock.
+        """
         self.segments = sorted(list(args), key=sort_by_start)
         if self.segments:
             self.ticker = self.segments[0].ticker
+            # Set the start date to be the earliest start date.
             self.start_date = self.segments[0].start_date
+            # Set the end date to be the latest end date.
             self.end_date = sorted(self.segments, key=sort_by_end)[-1].end_date
         self.__dict__.update(kwargs)
         self.ticker.upper()
@@ -127,12 +151,52 @@ class Stock(StockSegment):
     def __repr__(self):
         return super().__repr__()
 
-    #  TODO Make sure to update start/end dates of Stock
-    def add_segment(self):
-        pass
+    def add_segment(self, *segments: StockSegment):
+        """Add one or more StockSegments to an existing Stock. Begin by
+        checking that all StockSegments to be added do not already exist.
+        After adding all StockSegments, update the start and end dates if any of
+        the new StockSegments have an earlier start date or later end date
+        than the existing start and end date of the Stock.
 
-    def remove_segment(self):
-        pass
+        Arguments:
+            *segments: One or more StockSegments to be added to the Stock.
+        """
+        segs = sorted(segments, key=sort_by_start)
+        for s in segs:
+            if s not in self.segments:
+                self.segments.insert(bisect_left(self.segments, s), s)
+        if segs[0].start_date < self.segments[0].start_date:
+            self.start_date = segs[0].start_date
+        new_end = sorted(segments, key=sort_by_end)[-1].end_date
+        current_end = sorted(self.segments, key=sort_by_end)[-1].end_date
+        if new_end > current_end:
+            self.end_date = new_end
+
+    def remove_segment(self, *segments):
+        """Remove one or more StockSegments from the Stock. First checks that
+        any StockSegment to be removed exists in the Stock.
+
+        Arguments:
+            *segments: One or more StockSegments to remove.
+        """
+        for s in segments:
+            if s in self.segments:
+                self.segments.remove(s)
+
+    @property
+    def ticker(self):
+        segs_anons = [s.anonymous for s in self.segments]
+        if any(segs_anons):
+            if len(segs_anons) > 1:
+                return str([p.pseudonym for p in self.segments if p.anonymous])
+            else:
+                return self.segments[0].pseudonym
+        else:
+            return self._ticker
+
+    @ticker.setter
+    def ticker(self, t: str):
+        self._ticker = t
 
 
 def sort_by_start(segment):
