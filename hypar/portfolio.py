@@ -1,13 +1,15 @@
+import bisect
 from dataclasses import dataclass, field
 import datetime
+import itertools
 import numpy as np
 import pandas as pd
 from typing import Dict, List, Tuple
 
-from stock import Stock, StockSegment
+import stock
 
 
-@dataclass(init=False)
+@dataclass(init=False, order=True)
 class Portfolio(object):
     """A collection of Stocks. Serves the purpose of collectively analyzing how
     a group of Stocks performs together over a duration of time. Analysis and
@@ -19,11 +21,12 @@ class Portfolio(object):
         StockSegment. Each StockSegment corresponds to a partition date in
         which a unique sub-Portfolio exists.
     """
-    stocks: List[Stock] = field(default_factory=list)
-    segments: List[StockSegment] = field(default_factory=list)
+    sort_index: datetime.datetime = field(init=False, repr=False)
+    stocks: Dict[str, stock.Stock] = field(default_factory=dict)
+    segments: List[stock.StockSegment] = field(default_factory=list)
     partition_dates: List[List[datetime.datetime]] = field(default_factory=list)
     partitions: Dict[Tuple[datetime.datetime],
-                     List[StockSegment]] = field(default_factory=dict)
+                     List[stock.StockSegment]] = field(default_factory=dict)
 
     def __init__(self, *args, **kwargs):
         """Creates a Portfolio containing Stocks. Adds all Stocks to a list,
@@ -35,21 +38,21 @@ class Portfolio(object):
             *args: Stocks
             **kwargs: Any attribute meant to describe the Portfolio.
         """
-        self.stocks = list(args)
-        self.segments = [seg for s in self.stocks for seg in s.segments]
-        self.partition_dates = self.get_partition_dates()
+        self.stocks = {s.ticker: s for s in args}
+        self.segments = [se for s in self.stocks.values() for se in s.segments]
+        self.segments.sort()
+        self.partition_dates = self.find_partition_dates()
         self.partitions = self.partition()
+        self.start = stock.first_start(self.segments)
+        self.end = stock.last_end(self.segments)
         self.__dict__.update(kwargs)
 
     def __repr__(self):
-        tickers = [t.ticker for t in self.stocks]
-        start = sorted([d.start_date for s in self.stocks for d in s.segments])
-        end = sorted([d.end_date for s in self.stocks for d in s.segments])
+        tickers = [t for t in self.stocks.keys()]
         return f'{self.__class__.__name__}(stocks={tickers}, ' \
-            f'start={start[0]:%Y-%m-%d}, end={end[-1]:%Y-%m-%d})'
+            f'start={self.start:%Y-%m-%d}, end={self.end:%Y-%m-%d})'
 
-    # TODO Add docstring
-    def get_partition_dates(self):
+    def find_partition_dates(self):
         """Determines the start and end dates that partitions the Portfolio
         based on its holdings. In the simplest case, there is a single
         start-end date pair. This occurs when all holdings are held once
@@ -58,20 +61,20 @@ class Portfolio(object):
         """
         # Create a start date set that will be used as primary condition for
         # range setting, and to eliminate duplicates.
-        starts_set = set([s.start_date for s in self.segments])
+        starts_set = set([s.start for s in self.segments])
         # Create an end date set to eliminate duplicates.
-        ends_set = set([s.end_date for s in self.segments])
+        ends_set = set([s.end for s in self.segments])
         # Create a list of dates to iterate through to generate date ranges.
-        dates = list(starts_set) + list(ends_set)
-        # Sort so that the earliest dates are towards the beginning.
-        dates = sorted(dates)
+        dates = list(starts_set)
+        dates.extend(list(ends_set))
+        dates.sort()
         # If either condition is satisfied, the dates are added as a range:
         # 1. Date is a start date and is not the same as the next date.
         # 2. Two consecutive dates are both end dates.
         return [[d, dates[i + 1]] for i, d in enumerate(dates)
                 if (d in starts_set and d != dates[i + 1])
-                or (i + 2 <= len(dates) and d not in starts_set
-                    and dates[i + 1] not in starts_set)]
+                or (i + 2 <= len(dates) and d in ends_set
+                    and dates[i + 1] in ends_set)]
 
     def partition(self):
         """Partitions the Portfolio in accordance with its partition dates.
@@ -86,75 +89,47 @@ class Portfolio(object):
         partitions = dict()
         for p_date in self.partition_dates:
             for seg in self.segments:
-                if seg.start_date <= p_date[0] and seg.end_date >= p_date[1]:
+                if seg.start <= p_date[0] and seg.end >= p_date[1]:
                     if tuple(p_date) in set(partitions.keys()):
                         partitions[tuple(p_date)].append(seg)
                     else:
                         partitions[tuple(p_date)] = [seg]
         return partitions
 
-    # TODO Update Portfolio.segments
-    def add_stock(self, *stocks: Stock):
-        existing = set(self.stocks)
-        for stock in stocks:
-            if stock not in existing:
-                self.stocks.append(stock)
-        self.partition_dates = self.get_partition_dates()
+    # TODO Replace with duck typing try-except
+    def add(self, *args):
+        new_stocks = [st for st in args if hasattr(st, 'segments')
+                      and st.ticker not in self.stocks.keys()]
+        segs = [seg for seg in args if not hasattr(seg, 'segments')
+                and seg not in self.segments]
+        segs.extend([s for st in new_stocks for s in st.segments if s not in
+                     segs])
+        segs.sort()
+
+        for st in new_stocks:
+            self.stocks[st.ticker] = st
+        for s in segs:
+            if s.ticker in self.stocks.keys():
+                bisect.insort_left(self.stocks[s.ticker].segments, s)
+            else:
+                new_stock = stock.Stock(s)
+                bisect.insort_left(self.stocks, new_stock)
+
+        self.segments, self.start, self.end = stock.update(self.segments, segs)
+        self.partition_dates = self.find_partition_dates()
         self.partitions = self.partition()
 
-    # TODO Update Portfolio.segments
-    def remove_stock(self, *stocks: Stock):
-        existing = set(self.stocks)
-        for stock in stocks:
-            if stock in existing:
-                self.stocks.remove(stock)
-
-    # TODO Deprecated - needs rewritten (7/6/19)
-    def preview(self, anon=False):
-        """Displays a table that contains each Stock, referred to by
-        ticker (or pseudonym), the start and end dates of the data, and the
-        number of shares owned of each Stock.
-
-        Args:
-            anon (bool):
-
-        Returns:
-            pandas DataFrame with Stock ticker, number of shares, start and end
-            dates
-        """
-
-        def assign_label(stock_to_label):
-            """Helper method for preview(). Determine the anonymity state of
-            the Stock and assign the appropriate label.
-
-            Returns:
-                Stock's pseudonym if its anonymity state is True. Otherwise,
-                return its ticker.
-            """
-            is_anonymous, pseudonym = stock_to_label.anonymous[self]
-            return pseudonym if is_anonymous else stock_to_label.ticker
-
-        # TODO Fix - if already anonymous, don't deanonymize
-        # If preview is to be anonymous, make sure the Stocks are anonymized.
-        if anon:
-            self.anonymize()
-        else:
-            self.reveal()
-        # List to store number of shares and start/end dates for all Stocks.
-        info = []
-        # List to store either tickers or pseudonyms for the table.
-        index = []
-        # For each Stock, determine assign the appropriate label and collect
-        # the information to be assigned in the DataFrame.
-        for s in self.stocks.values():
-            if self in s.portfolios:
-                label = assign_label(s)
-                info.append([s.num_shares[self],
-                             s.start_date[self],
-                             s.end_date[self]])
-                index.append(label)
-        columns = ['Number of Shares', 'Start', 'End']
-        return pd.DataFrame(data=info, columns=columns, index=index)
+    def remove(self, *args):
+        st_exist = [st for st in args if isinstance(st, stock.Stock)
+                    and st in self.stocks.values()]
+        se_exist = [seg for seg in args if isinstance(seg, stock.StockSegment)
+                    and seg in self.segments]
+        se_exist.extend([st.segments for st in st_exist])
+        se_exist.sort()
+        for s in st_exist:
+            del self.stocks[s.ticker]
+        self.segments = [s for s in self.segments if s not in se_exist]
+        discard, self.start, self.end = stock.update(self.segments, [])
 
     # TODO Deprecated - needs rewritten (7/6/19)
     def total_shares(self):
@@ -205,7 +180,7 @@ class Portfolio(object):
         each Stock's anonymity state to False.
         """
         for s in self.stocks.values():
-            s.anonymous[self][0] = False
+            s.anonymous = True
 
     # TODO Deprecated - needs rewritten (7/6/19)
     def get_data_slice(self, attribute: str, dated=True, as_dict=False):
