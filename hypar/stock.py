@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import bisect
 from dataclasses import dataclass, field
 import datetime
@@ -116,33 +117,46 @@ class StockData(object):
     signifies the Stock activity during the date ranges in which it is owned.
     There may be regions of data that are not accessed if no StockSegment
     exists within that region of time.
+=======
+import datetime
+
+
+class Stock:
+    # TODO Complete Attributes
+    """A member unit of a Portfolio that contains numerous data attributes.
+>>>>>>> 6f35e43c5e68e292d93c56847790b15dbbedc0b9
 
     Attributes:
-        ticker (str): Ticker symbol of the Stock.
-        interday_pricing (List[Dict[str, Any]]): Daily adjusted and
-        unadjusted price and volume information.
-        balance_sheet (Dict[str, Any]): Balance sheet information of the most
-            recent available quarter.
-        book (Dict[str, Any]): Book data.
-        cash_flow (Dict[str, Any]): Cash flow information of the most recent
-            available quarter.
-        company (Dict[str, Any]): Company information, such as the website,
-            description, tags, and CEO.
-        earnings (Dict[str, Any]): Earnings data for a given company,
-            including the actual EPS, consensus, and fiscal period. Earnings are
-            available for the most recent four quarters.
-        estimate (Dict[str, Any]): Latest consensus estimate for the next
-            fiscal period.
-        income_statement (Dict[str, Any]): Income statement information from
-            the most recent available quarter.
-        intraday_pricing (Dict[str, Any]): Intraday trading information in
-            one-minute intervals.
-        ipo_today (Dict[str, List]): IPOs occurring today.
-        ipo_upcoming (Dict[str, List]): IPOs in the near future.
-        key_stats (Dict[str, Any]): Various summary data.
-        price_target (Dict[str, Any]): Latest average, high, and low analyst
-            price target.
+        ticker (str): Symbol that represents the Stock entity.
+        portfolios (list[Portfolio]): One or more Portfolios of which the Stock
+            is a member. The list contains all portfolios to which the stock
+            belongs.
+        num_shares (dict[Portfolio, int]): Number of shares owned in each
+            Portfolio. Each key is a Portfolio and the value is number of
+            shares.
+        start_date (dict[Portfolio, datetime]): Earliest data entry of the Stock
+            in each Portfolio. Each key is a Portfolio and each value is the
+            start date.
+        end_date (dict[Portfolio, datetime]): Most recent data entry of the
+            Stock in each Portfolio. Each key is a Portfolio and each value is
+            the end date.
+        price_data (dict):
+        balance_sheet (dict):
+        book_data (dict):
+        cash_flow (dict):
+        company_data (dict):
+        earnings (dict):
+        income_statement (dict):
+        intraday_data (dict):
+        key_stats (dict):
+        price_target (dict):
+        anonymous (dict[Portfolio, list[bool, str]): Each key is Portfolio and
+            each value is a list pair: if index 0 is True, the Stock is
+            "anonymous" and the pseudonym in index 1 string is displayed;
+            otherwise, the real ticker is displayed. Pseudonym format is 'S-xxx'
+            where 'xxx' is a randomly generated integer between 0-999.
     """
+<<<<<<< HEAD
     ticker: str
     interday_pricing: List[Dict[str, Any]] = field(default_factory=list)
     balance_sheet: Dict[str, Any] = field(default_factory=dict)
@@ -227,3 +241,43 @@ class Stock(StockSegment):
         for s in segments:
             if s in self.segments:
                 self.segments.remove(s)
+=======
+
+    def __init__(self, ticker, portfolios=None, num_shares=None,
+                 start_date=None, end_date=None, price_data=None,
+                 balance_sheet=None, book_data=None, cash_flow=None,
+                 company_data=None, earnings=None, income_statement=None,
+                 intraday_data=None, key_stats=None, price_target=None,
+                 anonymous=None):
+        """Instantiates a Stock with any associated data."""
+        self.ticker = str.upper(ticker)
+        # TODO Make this a set?
+        self.portfolios = portfolios
+        self.num_shares = num_shares
+        self.start_date = start_date
+        self.end_date = end_date
+        self.price_data = price_data
+        self.balance_sheet = balance_sheet
+        self.book_data = book_data
+        self.cash_flow = cash_flow
+        self.company_data = company_data
+        self.earnings = earnings
+        self.income_statement = income_statement
+        self.intraday_data = intraday_data
+        self.key_stats = key_stats
+        self.price_target = price_target
+        self.anonymous = anonymous
+        self.handle_container_status('portfolios', container_type=list)
+        self.handle_container_status('num_shares',
+                                     'start_date',
+                                     'end_date',
+                                     'anonymous',
+                                     container_type=dict)
+
+    def handle_container_status(self, *attributes, container_type=list):
+        for a in attributes:
+            if getattr(self, a) is None:
+                setattr(self, a, container_type())
+            else:
+                setattr(self, a, a)
+>>>>>>> 6f35e43c5e68e292d93c56847790b15dbbedc0b9

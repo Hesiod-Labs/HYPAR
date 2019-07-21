@@ -1,8 +1,7 @@
-import analysis
+from hypar import analysis
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-from portfolio import Portfolio
 import seaborn as sns
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()

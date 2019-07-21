@@ -1,7 +1,8 @@
 import operator
 import numpy as np
 import scipy.stats as stats
-from portfolio import Portfolio
+from hypar.portfolio import Portfolio
+
 
 def correlation(portfolio, attribute='changePercent', method='spearman',
                 absolute=True, weight_by_rank=False, weight_by_shares=False,
