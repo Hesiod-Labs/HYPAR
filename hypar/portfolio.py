@@ -1,36 +1,37 @@
-import bisect
-from dataclasses import dataclass, field
-import datetime
+from dataclasses import dataclass
 import itertools
 import numpy as np
-import pandas as pd
-from typing import Dict, List, Tuple
+from typing import Dict, Tuple, Union
 
 import stock
 
+# TODO
+#   1. Add docstring to all functions that don't have them
+#   2. Double check existing docstring is accurate.
+#   3. Test all functions.
+#   4. Push to GitHub
+#   4. Mixins for shared functions, like sorting, and maybe adding/removing
+#   5. Switch from to EAFP
 
-@dataclass(init=False, order=True)
+_free_pseudos = set()
+_new_pseudo = itertools.count()
+
+
+@dataclass(init=False)
 class Portfolio(object):
     """A collection of Stocks. Serves the purpose of collectively analyzing how
     a group of Stocks performs together over a duration of time. Analysis and
     group operations can be performed on a Portfolio as opposed to having to
-    apply the operation to each Stock and StockSegment(s) separately.
+    apply the operation to each Stock and Segment(s) separately.
 
     Attributes:
-        stocks (List[Stock]): Each Stock may contain more than one
-        StockSegment. Each StockSegment corresponds to a partition date in
-        which a unique sub-Portfolio exists.
+        stocks (Dict[str, Stock]): Each Stock may contain more than one
+            Segment. Each Segment corresponds to a partition date in
+            which a unique sub-Portfolio exists.
     """
-    sort_index: datetime.datetime = field(init=False, repr=False)
-    stocks: Dict[str, stock.Stock] = field(default_factory=dict)
-    segments: List[stock.StockSegment] = field(default_factory=list)
-    partition_dates: List[List[datetime.datetime]] = field(default_factory=list)
-    partitions: Dict[Tuple[datetime.datetime],
-                     List[stock.StockSegment]] = field(default_factory=dict)
-
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *stocks, **kwargs):
         """Creates a Portfolio containing Stocks. Adds all Stocks to a list,
-        aggregates all StockSegments to a single StockSegment list,
+        aggregates all StockSegments to a single Segment list,
         and determines the partition dates that will determine how the
         Portfolio is partitioned.
 
@@ -38,13 +39,12 @@ class Portfolio(object):
             *args: Stocks
             **kwargs: Any attribute meant to describe the Portfolio.
         """
-        self.stocks = {s.ticker: s for s in args}
-        self.segments = [se for s in self.stocks.values() for se in s.segments]
-        self.segments.sort()
+        self.stocks = self.finalize_stocks(stocks)
+        self.stock_ids = set(list(self.stocks.keys()))
         self.partition_dates = self.find_partition_dates()
-        self.partitions = self.partition()
-        self.start = stock.first_start(self.segments)
-        self.end = stock.last_end(self.segments)
+        self.start = stock.first_start(self.stocks)
+        self.end = stock.last_end(self.stocks)
+        self.is_watchlist = False
         self.__dict__.update(kwargs)
 
     def __repr__(self):
@@ -61,9 +61,11 @@ class Portfolio(object):
         """
         # Create a start date set that will be used as primary condition for
         # range setting, and to eliminate duplicates.
-        starts_set = set([s.start for s in self.segments])
+        starts_set = set([seg.start for s in self.stocks.values() for seg in
+                          s.segments.values()])
         # Create an end date set to eliminate duplicates.
-        ends_set = set([s.end for s in self.segments])
+        ends_set = set([seg.end for s in self.stocks.values() for seg in
+                        s.segments.values()])
         # Create a list of dates to iterate through to generate date ranges.
         dates = list(starts_set)
         dates.extend(list(ends_set))
@@ -76,53 +78,69 @@ class Portfolio(object):
                 or (i + 2 <= len(dates) and d in ends_set
                     and dates[i + 1] in ends_set)]
 
-    def partition(self):
-        """Partitions the Portfolio in accordance with its partition dates.
-        In the simplest case, there is one partition. That is, when all
-        holdings are held once and continuously. Otherwise, each partition
-        signifies a change in holdings.
+    @staticmethod
+    def assign_pseudo(element: Union[stock.Stock, stock.Segment]):
+        pseudo = _free_pseudos.pop() if _free_pseudos else next(_new_pseudo)
+        if hasattr(element, 'segment_id'):
+            element.pseudonym = f'S-{pseudo}'
+        elif len(element.segments) > 1:
+            element.pseudonym = f'S-{pseudo}x'
+        else:
+            element.pseudonym = f'S-{pseudo}'
 
-        Creates an empty dictionary to store the partitions such that each
-        partition date pair tuple is the key and the StockSegments owned during
-        that time are the values as a list.
-        """
-        partitions = dict()
-        for p_date in self.partition_dates:
-            for seg in self.segments:
-                if seg.start <= p_date[0] and seg.end >= p_date[1]:
-                    if tuple(p_date) in set(partitions.keys()):
-                        partitions[tuple(p_date)].append(seg)
-                    else:
-                        partitions[tuple(p_date)] = [seg]
-        return partitions
+    def finalize_stocks(self, stocks):
+        for s in list(stocks):
+            for seg in s.segments.values():
+                if not seg.pseudonym:
+                    self.assign_pseudo(seg)
+            self.assign_pseudo(s)
+        return {s.ticker: s for s in stocks}
 
-    # TODO Replace with duck typing try-except
-    def add(self, *args):
-        new_stocks = [st for st in args if hasattr(st, 'segments')
-                      and st.ticker not in self.stocks.keys()]
-        segs = [seg for seg in args if not hasattr(seg, 'segments')
-                and seg not in self.segments]
-        segs.extend([s for st in new_stocks for s in st.segments if s not in
-                     segs])
-        segs.sort()
+    def get_stock(self, stk: Union[stock.Stock, str]):
+        if isinstance(stk, stock.Stock) and stk.ticker in self.stock_ids:
+            return self.stocks[stk.ticker]
+        elif isinstance(stk, str) and stk in self.stock_ids:
+            return self.stocks[stk]
+        else:
+            print('Stock is not present in the Portfolio.')
 
-        for st in new_stocks:
-            self.stocks[st.ticker] = st
-        for s in segs:
-            if s.ticker in self.stocks.keys():
-                bisect.insort_left(self.stocks[s.ticker].segments, s)
+    def get_segment(self, seg: Union[stock.Segment, str]):
+        if isinstance(seg, stock.Segment) and seg.ticker in self.stock_ids:
+            return self.stocks[seg.ticker].get_segment(seg)
+        elif isinstance(seg, str) and seg in self.stock_ids:
+            return self.stocks[seg].segments
+        else:
+            print('Segment is not present in the Portfolio.')
+
+    # TODO Left off here (7/14/19)
+    # TODO Generate pseudonyms
+    def add_stocks(self, *stk: stock.Stock):
+        for s in stk:
+            if s.ticker not in self.stock_ids:
+                self.stock_ids.add(s.ticker)
+                if s.start < self.start:
+                    self.start = s.start
+                if s.end > self.end:
+                    self.end = s.end
+                self.stocks[s.ticker] = stk
             else:
-                new_stock = stock.Stock(s)
-                bisect.insort_left(self.stocks, new_stock)
-
-        self.segments, self.start, self.end = stock.update(self.segments, segs)
+                print('Stock is already in the Portfolio.')
         self.partition_dates = self.find_partition_dates()
-        self.partitions = self.partition()
 
+    # TODO Generate pseudonyms
+    def add_segment(self, seg: stock.Segment):
+        if seg.ticker not in self.stock_ids:
+            new_stock = stock.Stock(seg)
+            if new_stock.start < self.start:
+                self.start = new_stock.start
+            if new_stock.end > self.end:
+                self.end = new_stock.end
+
+    # TODO Split up into remove_stock and remove_segment
     def remove(self, *args):
         st_exist = [st for st in args if isinstance(st, stock.Stock)
                     and st in self.stocks.values()]
-        se_exist = [seg for seg in args if isinstance(seg, stock.StockSegment)
+        se_exist = [seg for seg in args if isinstance(seg, stock.Segment)
                     and seg in self.segments]
         se_exist.extend([st.segments for st in st_exist])
         se_exist.sort()
@@ -180,7 +198,9 @@ class Portfolio(object):
         each Stock's anonymity state to False.
         """
         for s in self.stocks.values():
-            s.anonymous = True
+            for seg in s.segments.values:
+                seg.anonymous = False
+            s.anonymous = False
 
     # TODO Deprecated - needs rewritten (7/6/19)
     def get_data_slice(self, attribute: str, dated=True, as_dict=False):
